@@ -1,26 +1,26 @@
 package com.github.GaskaPiotr.spring_boot_boilerplate.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Table(name = "app_user")
 @Getter
 @Setter
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @NotBlank
-    String email;
+    private String email;
 
     @NotBlank
-    String password;
+    private String password;
 
     public User(String email, String password) {
         this.email = email;
