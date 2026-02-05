@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Collection;
+
 @Entity
 @Getter
 @Setter
@@ -18,4 +20,7 @@ public class Role {
 
     @NotBlank
     private String name;
+
+    @OneToMany(mappedBy = "role")
+    private Collection<User> user;
 }
