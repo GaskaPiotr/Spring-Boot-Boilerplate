@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class SecurityService {
+public class AuthService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
     UserRepository userRepository;
 
-    public SecurityService(
+    public AuthService(
             UserRepository userRepository,
             BCryptPasswordEncoder bCryptPasswordEncoder
         ) {

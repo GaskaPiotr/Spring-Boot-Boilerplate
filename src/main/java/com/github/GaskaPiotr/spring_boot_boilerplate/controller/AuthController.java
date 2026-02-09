@@ -2,7 +2,7 @@ package com.github.GaskaPiotr.spring_boot_boilerplate.controller;
 
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginResponse;
-import com.github.GaskaPiotr.spring_boot_boilerplate.service.SecurityService;
+import com.github.GaskaPiotr.spring_boot_boilerplate.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-public class SecurityController {
-    private final SecurityService securityService;
+public class AuthController {
+    private final AuthService authService;
 
-    public SecurityController(SecurityService securityService) {
-        this.securityService = securityService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        LoginResponse response = securityService.login(request);
+        LoginResponse response = authService.login(request);
         return ResponseEntity.ok(response);
     }
 }
