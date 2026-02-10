@@ -2,6 +2,7 @@ package com.github.GaskaPiotr.spring_boot_boilerplate.security;
 
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.User;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.UserRepository;
+import jakarta.annotation.Nonnull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +18,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    @Nonnull
+    public UserDetails loadUserByUsername(@Nonnull String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not  found with email: " + email));
         return new CustomUserDetails(user);
