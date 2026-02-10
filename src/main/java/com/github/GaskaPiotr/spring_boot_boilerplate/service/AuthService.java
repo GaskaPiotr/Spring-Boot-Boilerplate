@@ -1,38 +1,48 @@
 package com.github.GaskaPiotr.spring_boot_boilerplate.service;
 
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
+import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginResponse;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.User;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.UserRepository;
+import com.github.GaskaPiotr.spring_boot_boilerplate.security.JwtService;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+
+
 @Service
 public class AuthService {
-    BCryptPasswordEncoder bCryptPasswordEncoder;
     UserRepository userRepository;
+    PasswordEncoder passwordEncoder;
+    AuthenticationManager authenticationManager;
+    JwtService jwtService;
 
     public AuthService(
             UserRepository userRepository,
-            BCryptPasswordEncoder bCryptPasswordEncoder
+            PasswordEncoder passwordEncoder,
+            AuthenticationManager authenticationManager,
+            JwtService jwtService
         ) {
         this.userRepository = userRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
-    public login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.email(), request.password())
+        );
+
         User user = userRepository
                 .findByEmail(request.email())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Email or Password"));
 
-
-        if (!bCryptPasswordEncoder.matches(request.password(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Email or Password");
-        }
-
-        // TODO
-        // Generate JWT
-        // return LoginResponse with token
+        String jwtToken = jwtService.generateToken(user);
+        return new LoginResponse(jwtToken);
     }
 }
