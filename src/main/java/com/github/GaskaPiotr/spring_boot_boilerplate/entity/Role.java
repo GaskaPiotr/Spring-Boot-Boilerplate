@@ -25,4 +25,8 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     private Collection<User> user;
+
+    public Role(String name) {
+        this.name = name;
+    }
 }

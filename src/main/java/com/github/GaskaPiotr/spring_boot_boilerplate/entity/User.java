@@ -2,6 +2,7 @@ package com.github.GaskaPiotr.spring_boot_boilerplate.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ public class User extends BaseEntity {
     @NotBlank
     private String password;
 
-    @NotBlank
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
