@@ -39,7 +39,7 @@ public class DataInitializer {
             Role adminRole = roleRepository.findByName("ADMIN")
                     .orElseGet(() -> roleRepository.save(new Role("ADMIN")));
             Role userRole = roleRepository.findByName("USER")
-                    .orElseGet(() -> roleRepository.save(new Role("User")));
+                    .orElseGet(() -> roleRepository.save(new Role("USER")));
             if (userRepository.findByEmail(adminEmail).isEmpty()) {
                 User admin = new User();
                 admin.setEmail(adminEmail);
