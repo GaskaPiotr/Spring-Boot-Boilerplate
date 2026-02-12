@@ -3,17 +3,13 @@ package com.github.GaskaPiotr.spring_boot_boilerplate.service;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginResponse;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.User;
-import com.github.GaskaPiotr.spring_boot_boilerplate.exception.InvalidCredentialsException;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.UserRepository;
 import com.github.GaskaPiotr.spring_boot_boilerplate.security.JwtService;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
 
 
 @Service
