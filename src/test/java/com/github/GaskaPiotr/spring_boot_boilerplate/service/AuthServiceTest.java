@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -84,5 +85,25 @@ class AuthServiceTest {
 
         // 2. Check if database was ever touched
         verify(userRepository, never()).findByEmail(any());
+    }
+
+    @Test
+    void login_UserDeletedButAuthPasses_ThrowException() {
+
+        // Arrange
+
+        String email = "ghost@test.com";
+
+        String password = "testpassword";
+
+        LoginRequest request = new LoginRequest(email, password);
+
+        when(userRepository.findByEmail(any()))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+
+        assertThrows(UsernameNotFoundException.class, () ->  authService.login(request));
+
     }
 }
