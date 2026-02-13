@@ -11,14 +11,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
@@ -61,6 +62,27 @@ class AuthServiceTest {
         assertEquals(password, captor.getValue().getCredentials());
 
         verify(userRepository).findByEmail(email);
+    }
 
+    @Test
+    void login_WrongPassword_ThrowException() {
+
+        // Arrange
+
+        String email = "good@email.com";
+        String password = "wrongpassword";
+
+        LoginRequest request = new LoginRequest(email, password);
+
+        when(authenticationManager.authenticate(any()))
+                .thenThrow(new BadCredentialsException("Bad credentials"));
+
+        // Act & Assert
+
+        // 1. Check if login throws an exception
+        assertThrows(BadCredentialsException.class, () -> authService.login(request));
+
+        // 2. Check if database was ever touched
+        verify(userRepository, never()).findByEmail(any());
     }
 }
