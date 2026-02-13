@@ -10,6 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+
+import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
@@ -57,8 +60,29 @@ class AuthControllerTest {
 
         // 3. Check the delegation to service
         verify(authService).login(request);
+    }
 
+    @Test
+    void login_WrongCredentials_ThrowsException() {
 
+        // Arrange
+        String email = "wrong@email.com";
+        String password = "wrongpassword";
+
+        LoginRequest badRequest = new LoginRequest(email, password);
+
+        when(authService.login(badRequest))
+                .thenThrow(new BadCredentialsException("Bad credentials"));
+
+        // Act & Assert
+
+        // 1. Check if authController throws Exception
+        assertThrows(BadCredentialsException.class, () -> {
+            authController.login(badRequest);
+        });
+
+        // 2. Check if authService tried to log in
+        verify(authService).login(badRequest);
     }
 
 }
