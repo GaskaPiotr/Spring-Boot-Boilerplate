@@ -106,4 +106,27 @@ class AuthServiceTest {
         assertThrows(UsernameNotFoundException.class, () ->  authService.login(request));
 
     }
+
+    @Test
+    void login_JWTGenerationFails_ThrowException() {
+
+        // Arrange
+
+        String email = "test@test.com";
+        String password = "testpassword";
+
+        LoginRequest request = new LoginRequest(email, password);
+
+        User user = new User();
+
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+
+        when(jwtService.generateToken(any()))
+                .thenThrow(new RuntimeException("Missing key"));
+
+        // Act & Assert
+
+        assertThrows(RuntimeException.class, () -> authService.login(request));
+
+    }
 }
