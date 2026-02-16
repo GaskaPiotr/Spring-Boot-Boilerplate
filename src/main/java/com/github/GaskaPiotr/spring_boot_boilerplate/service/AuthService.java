@@ -2,6 +2,8 @@ package com.github.GaskaPiotr.spring_boot_boilerplate.service;
 
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginResponse;
+import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterRequest;
+import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterResponse;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.User;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.UserRepository;
 import com.github.GaskaPiotr.spring_boot_boilerplate.security.JwtService;
@@ -45,15 +47,28 @@ public class AuthService {
     
     public RegisterResponse register(RegisterRequest request) {
         if (userRepository.findByEmail(request.email()).isPresent()) {
-            // Throw exception
+
+            // --- WARNING ---
+            // VULNERABLE TO User Enumeration Attacks
+            // --- WARNING ---
+
+            throw new UserAlreadyExistsException("Email already in use");
         }
-        
+
+        // TODO Check if password is strong enough
+        // TODO Check if email is correct
+
         User user = new User();
-        
-        // TODO set user parameters
-        
-        
-        // TODO return some register response
-        return RegisterResponse()
+
+        user.setEmail(request.email());
+        user.setPassword(passwordEncoder.encode(request.password()));
+
+        userRepository.save(user);
+
+        // --- WARNING ---
+        // VULNERABLE TO User Enumeration Attacks
+        // --- WARNING ---
+
+        return new RegisterResponse("User registered successfully");
     }
 }
