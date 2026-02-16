@@ -42,4 +42,18 @@ public class AuthService {
         String jwtToken = jwtService.generateToken(user);
         return new LoginResponse(jwtToken);
     }
+    
+    public RegisterResponse register(RegisterRequest request) {
+        if (userRepository.findByEmail(request.email()).isPresent()) {
+            // Throw exception
+        }
+        
+        User user = new User();
+        
+        // TODO set user parameters
+        
+        
+        // TODO return some register response
+        return RegisterResponse()
+    }
 }
