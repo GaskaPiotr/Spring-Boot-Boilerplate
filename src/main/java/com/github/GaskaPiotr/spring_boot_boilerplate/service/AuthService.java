@@ -5,6 +5,7 @@ import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginResponse;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterResponse;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.User;
+import com.github.GaskaPiotr.spring_boot_boilerplate.exception.UserAlreadyExistsException;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.UserRepository;
 import com.github.GaskaPiotr.spring_boot_boilerplate.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
