@@ -2,8 +2,11 @@ package com.github.GaskaPiotr.spring_boot_boilerplate.controller;
 
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginResponse;
+import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterRequest;
+import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterResponse;
 import com.github.GaskaPiotr.spring_boot_boilerplate.service.AuthService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,5 +26,12 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         LoginResponse response = authService.login(request);
         return ResponseEntity.ok(response);
+    }
+
+
+    @PostMapping("/register")
+    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
+        RegisterResponse response = authService.register(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
