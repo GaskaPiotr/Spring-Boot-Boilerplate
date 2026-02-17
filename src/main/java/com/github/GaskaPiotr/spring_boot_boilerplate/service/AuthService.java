@@ -4,8 +4,10 @@ import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginResponse;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterResponse;
+import com.github.GaskaPiotr.spring_boot_boilerplate.entity.Role;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.User;
 import com.github.GaskaPiotr.spring_boot_boilerplate.exception.UserAlreadyExistsException;
+import com.github.GaskaPiotr.spring_boot_boilerplate.repository.RoleRepository;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.UserRepository;
 import com.github.GaskaPiotr.spring_boot_boilerplate.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,21 +19,24 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
-    UserRepository userRepository;
-    PasswordEncoder passwordEncoder;
-    AuthenticationManager authenticationManager;
-    JwtService jwtService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final RoleRepository roleRepository;
 
     public AuthService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager,
-            JwtService jwtService
+            JwtService jwtService,
+            RoleRepository roleRepository
         ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.roleRepository = roleRepository;
     }
 
     public LoginResponse login(LoginRequest request) {
@@ -56,14 +61,14 @@ public class AuthService {
             throw new UserAlreadyExistsException("Email already in use");
         }
 
-        // TODO Check if password is strong enough
-        // TODO Check if email is correct
-
         User user = new User();
 
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
 
+        Role role = roleRepository.findByName("USER")
+                        .orElseThrow(() -> new RoleNotFoundException("User role not found"));
+        user.setRole(role);
         userRepository.save(user);
 
         // --- WARNING ---
