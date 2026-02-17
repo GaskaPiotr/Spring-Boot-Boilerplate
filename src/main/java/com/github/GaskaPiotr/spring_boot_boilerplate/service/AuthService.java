@@ -6,6 +6,7 @@ import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterResponse;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.Role;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.User;
+import com.github.GaskaPiotr.spring_boot_boilerplate.exception.RoleNotFoundException;
 import com.github.GaskaPiotr.spring_boot_boilerplate.exception.UserAlreadyExistsException;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.RoleRepository;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.UserRepository;
