@@ -1,7 +1,10 @@
 package com.github.GaskaPiotr.spring_boot_boilerplate.service;
 
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
+import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterRequest;
+import com.github.GaskaPiotr.spring_boot_boilerplate.entity.Role;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.User;
+import com.github.GaskaPiotr.spring_boot_boilerplate.repository.RoleRepository;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.UserRepository;
 import com.github.GaskaPiotr.spring_boot_boilerplate.security.JwtService;
 import org.junit.jupiter.api.Test;
@@ -33,6 +36,8 @@ class AuthServiceTest {
     AuthenticationManager authenticationManager;
     @Mock
     JwtService jwtService;
+    @Mock
+    RoleRepository roleRepository;
 
     @InjectMocks
     AuthService authService;
@@ -129,4 +134,56 @@ class AuthServiceTest {
         assertThrows(RuntimeException.class, () -> authService.login(request));
 
     }
+
+
+    @Test
+    void register_EmailNotUsed_RegisteredSuccessfully() {
+
+        // Arrange
+
+        String email = "example@test.com";
+        String password = "passwordExample";
+        String encodedPassword = "encodedPassword";
+
+        RegisterRequest request = new RegisterRequest(email, password);
+
+        Role role = new Role("USER");
+
+        when(userRepository.findByEmail(email))
+                .thenReturn(Optional.empty());
+
+        // Intellij was yelling that Argument ".encode(password)" might be null, so I used doReturn.
+        // when().thenReturn() calls the method but doReturn don't that's why it is working.
+        doReturn(encodedPassword).when(passwordEncoder).encode(password);
+
+        when(roleRepository.findByName("USER"))
+                .thenReturn(Optional.of(role));
+
+
+        // Act
+
+        authService.register(request);
+
+
+        // Assert
+
+        // ArgumentCaptor for the User class
+        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+
+        // Capture the user that was passed
+        verify(userRepository).save(userArgumentCaptor.capture());
+
+        // SavedUser
+        User savedUser = userArgumentCaptor.getValue();
+
+        // Assert savedUser parameters
+        assertEquals(email, savedUser.getEmail());
+        assertEquals(encodedPassword, savedUser.getPassword());
+        assertEquals(role, savedUser.getRole());
+
+
+        // Check if findByEmail was called
+        verify(userRepository).findByEmail(email);
+
+     }
 }
