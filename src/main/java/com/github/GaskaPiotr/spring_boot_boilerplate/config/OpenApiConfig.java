@@ -13,6 +13,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Boilerplate Spring Boot API Project")
                         .version("1.0.0")
-                        .description("This is the backend boilerplate API for general purpose. It manages users, registering and logging"));
+                        .description("A general purpose backend boilerplate API. It handles user management, registration and authentication"));
     }
 }
