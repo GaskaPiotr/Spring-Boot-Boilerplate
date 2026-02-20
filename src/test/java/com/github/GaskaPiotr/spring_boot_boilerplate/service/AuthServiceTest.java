@@ -4,6 +4,7 @@ import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.Role;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.User;
+import com.github.GaskaPiotr.spring_boot_boilerplate.exception.RoleNotFoundException;
 import com.github.GaskaPiotr.spring_boot_boilerplate.exception.UserAlreadyExistsException;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.RoleRepository;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.UserRepository;
@@ -206,4 +207,21 @@ class AuthServiceTest {
         assertThrows(UserAlreadyExistsException.class, () -> authService.register(request));
     }
 
+    @Test
+    void register_UserRoleNotFound_ThrowException() {
+
+        // Arrange
+
+        String email = "email@example.com";
+        String password = "passwordExample";
+
+        RegisterRequest request = new RegisterRequest(email, password);
+
+        when(roleRepository.findByName("USER"))
+                .thenThrow(new RoleNotFoundException("User role not found"));
+
+        // Act & Assert
+
+        assertThrows(RoleNotFoundException.class, () -> authService.register(request));
+    }
 }
