@@ -4,6 +4,7 @@ import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.Role;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.User;
+import com.github.GaskaPiotr.spring_boot_boilerplate.exception.UserAlreadyExistsException;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.RoleRepository;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.UserRepository;
 import com.github.GaskaPiotr.spring_boot_boilerplate.security.JwtService;
@@ -185,5 +186,24 @@ class AuthServiceTest {
         // Check if findByEmail was called
         verify(userRepository).findByEmail(email);
 
-     }
+    }
+
+    @Test
+    void register_EmailUsed_ThrowException() {
+
+        // Arrange
+        String email = "usedMail@example.com";
+
+        String password = "testPassword";
+
+        RegisterRequest request = new RegisterRequest(email, password);
+
+        when(userRepository.findByEmail(email))
+                .thenReturn(Optional.of(new User(email, password)));
+
+        // Act & Assert
+
+        assertThrows(UserAlreadyExistsException.class, () -> authService.register(request));
+    }
+
 }
