@@ -40,7 +40,7 @@ public class AuthService {
         this.roleRepository = roleRepository;
     }
 
-    public LoginResponse login(LoginRequest request) {
+    public String login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.password())
         );
@@ -48,8 +48,7 @@ public class AuthService {
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        String jwtToken = jwtService.generateToken(user);
-        return new LoginResponse(jwtToken);
+        return jwtService.generateToken(user);
     }
     
     public RegisterResponse register(RegisterRequest request) {
