@@ -33,9 +33,23 @@ public class AuthController {
         ResponseCookie cookie = ResponseCookie.from("jwt-token")
                 .value(token)
                 .domain("localhost")
-                .maxAge(Duration.ofSeconds(60))
+                .maxAge(Duration.ofSeconds(360))
                 .httpOnly(true)
                 .secure(true) // Https or localhost
+                .path("/")
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        ResponseCookie cookie = ResponseCookie.from("jwt-token")
+                .maxAge(Duration.ofSeconds(0))
+                .httpOnly(true)
+                .secure(true)
                 .path("/")
                 .build();
 
