@@ -38,6 +38,9 @@ public class SecurityConfig {
                                 "/api/v1/auth/**",
                                 "/v1/**"
                         ).permitAll()
+                        .requestMatchers(
+                                "/api/v1/users/**"
+                        ).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
