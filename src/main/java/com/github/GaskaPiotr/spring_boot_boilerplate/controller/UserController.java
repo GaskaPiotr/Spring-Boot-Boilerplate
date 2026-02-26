@@ -1,7 +1,7 @@
 package com.github.GaskaPiotr.spring_boot_boilerplate.controller;
 
-import com.github.GaskaPiotr.spring_boot_boilerplate.entity.User;
-import com.github.GaskaPiotr.spring_boot_boilerplate.repository.UserRepository;
+import com.github.GaskaPiotr.spring_boot_boilerplate.dto.UserResponse;
+import com.github.GaskaPiotr.spring_boot_boilerplate.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,15 +13,15 @@ import java.util.List;
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    UserRepository userRepository;
+    UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userRepository.findAll();
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
+        List<UserResponse> users = userService.getAll();
         return ResponseEntity.ok(users);
     }
 }
