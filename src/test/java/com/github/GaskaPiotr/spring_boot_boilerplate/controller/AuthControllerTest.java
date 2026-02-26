@@ -8,11 +8,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 
 import java.awt.*;
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
@@ -28,35 +31,39 @@ class AuthControllerTest {
     AuthController authController;
 
     @Test
-    void login_UserLogsIn_GetsTokenAndHttpOk() {
+    void login_UserLogsIn_GetsCookieAndHttpOk() {
 
         // Arrange
         String email = "user@test.com";
-        String password = "testpassword";
+        String password = "testPassword";
 
         LoginRequest request = new LoginRequest(email, password);
 
-        LoginResponse response = new LoginResponse("test-token");
+        String response = "test-token";
+
+        ResponseCookie cookie = ResponseCookie.from("jwt-token")
+                .value(response)
+                .domain("localhost")
+                .maxAge(Duration.ofSeconds(360))
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .build();
 
         when(authService.login(request)).thenReturn(response);
 
 
         // Act
-        ResponseEntity<LoginResponse> result = authController.login(request);
+
+        ResponseEntity<Void> result = authController.login(request);
 
         // Assert
 
         // 1. Check the status code
         assertEquals(HttpStatus.OK, result.getStatusCode());
 
-        // 2. Check the body
-        LoginResponse body = result.getBody();
-
-        assertEquals(response, body);
-
-        assertNotNull(body, "Response body should not be null");
-
-        assertEquals("test-token", body.token());
+        // 2. Check the header cookie
+        assertEquals(cookie.toString(), result.getHeaders().getFirst(HttpHeaders.SET_COOKIE));
 
         // 3. Check the delegation to service
         verify(authService).login(request);
