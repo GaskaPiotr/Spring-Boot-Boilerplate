@@ -1,7 +1,6 @@
 package com.github.GaskaPiotr.spring_boot_boilerplate.service;
 
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
-import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginResponse;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterResponse;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.Role;

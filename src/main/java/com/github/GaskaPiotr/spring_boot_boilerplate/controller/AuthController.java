@@ -1,11 +1,9 @@
 package com.github.GaskaPiotr.spring_boot_boilerplate.controller;
 
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
-import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginResponse;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterResponse;
 import com.github.GaskaPiotr.spring_boot_boilerplate.service.AuthService;
-import jakarta.servlet.http.Cookie;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
