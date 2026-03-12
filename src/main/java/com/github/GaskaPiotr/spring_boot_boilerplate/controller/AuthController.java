@@ -33,7 +33,7 @@ public class AuthController {
         ResponseCookie cookie = ResponseCookie.from("jwt-token")
                 .value(token)
                 .domain("localhost")
-                .maxAge(Duration.ofSeconds(jwtExpiration))
+                .maxAge(Duration.ofMillis(jwtExpiration))
                 .httpOnly(true)
                 .secure(true) // Https or localhost
                 .sameSite("Lax")
