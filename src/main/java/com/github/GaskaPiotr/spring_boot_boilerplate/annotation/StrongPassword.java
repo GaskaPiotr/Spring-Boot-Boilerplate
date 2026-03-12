@@ -13,8 +13,6 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = StrongPasswordConstraintValidator.class)
 public @interface StrongPassword {
 
-    // Every validation must have these methods
-
     String message() default "Invalid password";
 
     Class<?>[] groups() default {};

@@ -1,7 +1,6 @@
 package com.github.GaskaPiotr.spring_boot_boilerplate.controller;
 
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
-import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginResponse;
 import com.github.GaskaPiotr.spring_boot_boilerplate.service.AuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 
-import java.awt.*;
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
