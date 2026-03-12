@@ -36,6 +36,7 @@ DB_PASSWORD=your_secure_postgres_password
 
 # JWT Security
 JWT_SECRET_KEY=your_super_secret_jwt_key_that_is_at_least_256_bits_long
+# Time in milliseconds
 JWT_EXPIRATION=86400000
 
 # Default Admin Credentials
